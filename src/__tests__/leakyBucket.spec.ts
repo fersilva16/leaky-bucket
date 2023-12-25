@@ -30,7 +30,7 @@ it('should increment', async () => {
 
   expect(await redis.zrangebyscore(key, '-inf', '+inf', 'WITHSCORES')).toEqual([
     '1',
-    '1703462520000',
+    (Date.now() + expiration).toString(),
   ]);
 
   expect(await redis.ttl(key)).toBe(1200000);
@@ -52,7 +52,7 @@ it('should increment and remove expired tokens', async () => {
 
   expect(await redis.zrangebyscore(key, '-inf', '+inf', 'WITHSCORES')).toEqual([
     '1',
-    '1703462520000',
+    (Date.now() + expiration).toString(),
   ]);
 });
 
@@ -73,9 +73,9 @@ it('should increment using last token and reset expiration', async () => {
 
   expect(await redis.zrangebyscore(key, '-inf', '+inf', 'WITHSCORES')).toEqual([
     '1',
-    '1703462520000',
+    (Date.now() + expiration).toString(),
     '2',
-    '1703462760000',
+    (Date.now() + expiration * 2).toString(),
   ]);
 
   expect(await redis.ttl(key)).toBe(1200000);
@@ -100,13 +100,13 @@ it('should increment without duplicating tokens', async () => {
 
   expect(await redis.zrangebyscore(key, '-inf', '+inf', 'WITHSCORES')).toEqual([
     '1',
-    '1703462520000',
+    (Date.now() + expiration).toString(),
     '2',
-    '1703462760000',
+    (Date.now() + expiration * 2).toString(),
     '3',
-    '1703463120000',
+    (Date.now() + expiration * 3).toString(),
     '4',
-    '1703463600000',
+    (Date.now() + expiration * 4).toString(),
   ]);
 
   expect(await redis.ttl(key)).toBe(1200000);
@@ -116,6 +116,7 @@ it('should decrement', async () => {
   Mockdate.set('2023-12-25T00:00:00.000Z');
 
   await redis.zadd(key, '1703462400000', '1');
+  await redis.zadd(key, '1703462520000', '2');
 
   const leaky = leakyBucket(key, {
     expiration,
@@ -124,9 +125,10 @@ it('should decrement', async () => {
 
   await leaky.decrement();
 
-  expect(await redis.zrangebyscore(key, '-inf', '+inf', 'WITHSCORES')).toEqual(
-    []
-  );
+  expect(await redis.zrangebyscore(key, '-inf', '+inf', 'WITHSCORES')).toEqual([
+    '1',
+    '1703462400000',
+  ]);
 });
 
 it('should count the tokens', async () => {

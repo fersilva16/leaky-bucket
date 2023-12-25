@@ -23,7 +23,7 @@ export const leakyBucket = (
 
     const result = await redis.zadd(
       key,
-      now + (lastEx - now) + expiration * count,
+      now + (lastEx - now) + expiration,
       last + 1
     );
 
