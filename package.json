@@ -1,0 +1,23 @@
+{
+  "name": "leaky-bucket",
+  "version": "1.0.0",
+  "description": "Leaky bucket implementation using Redis sorted sets",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "bun test"
+  },
+  "keywords": [],
+  "author": "Fernando Silva <fernandonsilva16@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "ioredis": "^5.3.2",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.0.0",
+    "@types/node": "^20.10.5",
+    "bun-types": "latest",
+    "ioredis-mock": "^8.9.0",
+    "mockdate": "^3.0.5"
+  }
+}
