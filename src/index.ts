@@ -13,10 +13,6 @@ import { redis } from './redis';
 
   console.log(await leaky.debug());
 
-  console.log(await leaky.decrement());
-
-  console.log(await leaky.count());
-
   console.log(await redis.ttl('leaky'));
 
   process.exit(0);

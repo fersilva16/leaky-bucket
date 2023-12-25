@@ -4,6 +4,7 @@
   "description": "Leaky bucket implementation using Redis sorted sets",
   "main": "src/index.ts",
   "scripts": {
+    "start": "bun run src/index.ts",
     "test": "bun test"
   },
   "keywords": [],
